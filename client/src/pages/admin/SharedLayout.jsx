@@ -7,9 +7,9 @@ const SharedLayout = () => {
       <main className="grid grid-rows-1 lg:grid-cols-[auto,1fr]">
         <SmallSidebar />
         <BigSidebar />
-        <div>
+        <div className="bg-gray-200">
           <AdminNavbar />
-          <div className="w-[90vw] mx-auto py-8 lg:w-11/12">
+          <div className="w-[90vw] mx-auto py-8 lg:w-11/12 ">
             <Outlet /> {/* Renders the child components */}
           </div>
         </div>

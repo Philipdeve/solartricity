@@ -5,7 +5,14 @@ const categorySchema = new Schema({
     type: String,
     required: true
   },
-  // Other category fields as needed
+  description: {
+    type: String,
+    required: true
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const Category = model('Category', categorySchema);
