@@ -13,6 +13,7 @@ function App() {
     formData.append('email', email);
     formData.append('file', file);
     await axios.post('/api/upload', formData);
+    await axios.post('/api/upload', formData);
   };
 
   return (
