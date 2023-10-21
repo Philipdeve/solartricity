@@ -8,7 +8,7 @@ import connectDB from './db/connect.js';
 
 //routers
 import authRouter from "./routes/authRoutes.js";
-import apiRouter from './routes/apiRoutes.js'
+import appRouter from './routes/appRoutes.js'
 
 //middleware
 import errorHandlerMiddleware from "./middlewares/error-handler.js";
@@ -29,7 +29,7 @@ app.get("/api/v1", async (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/api", apiRouter);
+app.use("/api/v1/app", appRouter);
 
 //middleware to ...
 app.use(errorHandlerMiddleware);

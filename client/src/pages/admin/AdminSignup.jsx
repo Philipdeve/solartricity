@@ -53,11 +53,11 @@ const AdminSignup = () => {
 
   return (
     <>
-      <div className="min-h-screen">
-        <form className="form" onSubmit={onSubmit}>
+      <div className="min-h-screen grid items-center bg-gray-200">
+        <form className="form border-t-4 border-solid border-yellow-500" onSubmit={onSubmit}>
           <Logo />
          
-          <h3 className="mt-6">{values.isMember ? 'Admin Signin' : 'Admin Signup'}</h3>
+          <h3 className="mt-6 text-center">{values.isMember ? 'Admin Signin' : 'Admin Signup'}</h3>
 
           {!values.isMember && (
             <FormRow
@@ -84,13 +84,13 @@ const AdminSignup = () => {
             handleChange={handleChange}
           />
 
-          <button type="submit" className="" disabled={isLoading}>
+          <button type="submit" className="btn mt-4 w-full" disabled={isLoading}>
             submit
           </button>
 
-          <p>
-          {values.isMember ? 'Not an admin yet? ' : 'Already an admin ?'}
-          <button  type='button' onClick={toggleMember} className='member-btn'>
+          <p className="m-0 mt-4 text-center">
+          {values.isMember ? 'Not an admin yet? ' : 'Already an admin? '}
+          <button  type='button' onClick={toggleMember} className='bg-transparent border-transparent cursor-pointer text-blue-500 '>
            
             {values.isMember ? 'Signup' : 'Signin'}
           </button>

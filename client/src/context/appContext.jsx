@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import { TOGGLE_SIDEBAR, ADMIN_SIGNUP,
   ADMIN_SIGNUP_SUCCESS,
-  ADMIN_SIGNUP_ERROR, ADMIN_SIGNIN, ADMIN_SIGNIN_SUCCESS, ADMIN_SIGNIN_ERROR } from "./actions";
+  ADMIN_SIGNUP_ERROR, ADMIN_SIGNIN, ADMIN_SIGNIN_SUCCESS, ADMIN_SIGNIN_ERROR,  } from "./actions";
 
 import reducer from "./reducer";
 
@@ -79,12 +79,10 @@ const AppProvider = ({ children }) => {
       toast.error(error.response.data.msg)
       dispatch({
         type: ADMIN_SIGNIN_ERROR,
-        payload: { msg: error.response.data.msg },
+        payload: { msg: error.response.data.msg }
       });
     }
-   
   };  
-
 
   return (
     <AppContext.Provider value={{ ...state, toggleSidebar, adminSignup, adminSignin}}>
