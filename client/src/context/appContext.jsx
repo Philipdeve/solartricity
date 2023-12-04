@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import { TOGGLE_SIDEBAR, ADMIN_SIGNUP,
   ADMIN_SIGNUP_SUCCESS,
-  ADMIN_SIGNUP_ERROR, ADMIN_SIGNIN, ADMIN_SIGNIN_SUCCESS, ADMIN_SIGNIN_ERROR,  } from "./actions";
+  ADMIN_SIGNUP_ERROR, ADMIN_SIGNIN, ADMIN_SIGNIN_SUCCESS, ADMIN_SIGNIN_ERROR,  CART_ADD_ITEM, CART_REMOVE_ITEM} from "./actions";
 
 import reducer from "./reducer";
 
@@ -16,6 +16,11 @@ const initialState = {
   showSideBar: false,
   user: user ? JSON.parse(user) : null,
   token: token,
+  cart: {
+    cartItems: localStorage.getItem("cartItems")
+    ? JSON.parse(localStorage.getItem("cartItems"))
+    : [],
+  }
 };
 
 const AppContext = React.createContext();
@@ -84,8 +89,22 @@ const AppProvider = ({ children }) => {
     }
   };  
 
+  const addToCart = async(product, quantity) => {
+    dispatch({
+      type: CART_ADD_ITEM,
+      payload: {...product, quantity}
+    });
+  }
+
+  const removeCartItem = async(product) => {
+    dispatch({
+      type: CART_REMOVE_ITEM,
+      payload: {...product}
+    });
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, toggleSidebar, adminSignup, adminSignin}}>
+    <AppContext.Provider value={{ ...state, toggleSidebar, adminSignup, adminSignin, addToCart, removeCartItem}}>
       {children}
     </AppContext.Provider>
   );

@@ -146,3 +146,7 @@ h5 {
   letter-spacing: var(--letterSpacing);
   text-transform: capitalize;
 }
+
+.custom-container{
+  @apply w-[85vw] lg:w-[90vw] mx-auto my-0 max-w-6xl py-7;
+}

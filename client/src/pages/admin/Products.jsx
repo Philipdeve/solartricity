@@ -6,7 +6,6 @@ import { FormRow } from "../../components/";
 const initialState = {
   name: "",
   description: "",
-  slug: "",
   brand: "",
   price: "",
   stockQuantity: "",
@@ -18,9 +17,36 @@ const Products = () => {
   const [categories, setCategories] = useState([]);
   const [values, setValues] = useState(initialState);
 
+  // Function to generate a slug from a string
+  const generateSlug = (text) =>
+    text
+      .toString()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "");
+
+  useEffect(() => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      slug: generateSlug(prevValues.name),
+    }));
+  }, [values.name]);
+
   const handleProductInput = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value }); //made use of dynamic object keys to easily handle update in input state
+    const { name, value } = e.target;
+    setValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    })); //using the callback function to ensure i get the current state
   };
+
+
+  // const handleProductInput = (e) => {
+  //   setValues({ ...values, [e.target.name]: e.target.value }); //made use of dynamic object keys to easily handle update in input state
+  // };
 
   const handleImageInput = (e) => {
     setValues({ ...values, image: e.target.files[0] });
