@@ -7,13 +7,13 @@ const productSchema = new mongoose.Schema(
     image: { type: String, required: true },
     brand: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, required: true },
+    price: { type: String, required: true },
     stockQuantity: { type: Number, required: true, min: 0 },
     // rating: { type: Number, required: true },
     // numReviews: { type: Number, required: true },
     category: {
       type: String,
-      ref: 'Category', // Reference to the Category model
+      ref: 'Category',
       required: true
     }
   },

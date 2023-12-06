@@ -121,7 +121,7 @@ const Products = () => {
             handleChange={handleProductInput}
           />
           <FormRow
-            type="number"
+            type="text"
             name="price"
             value={values.price}
             handleChange={handleProductInput}

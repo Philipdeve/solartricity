@@ -47,7 +47,7 @@ const Home = () => {
     arrows: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 4,
     slidesToScroll: 1,
     initialSlide: 1,
     responsive: [

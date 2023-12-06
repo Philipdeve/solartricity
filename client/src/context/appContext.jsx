@@ -101,6 +101,9 @@ const AppProvider = ({ children }) => {
       type: CART_REMOVE_ITEM,
       payload: {...product}
     });
+    toast.success("Product removed from cart",  {
+      autoClose: 2000,
+    });
   }
 
   return (

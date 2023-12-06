@@ -50,29 +50,23 @@ const Product = () => {
 
   useEffect(() => {
     try {
-      const fetchProducts = async () => {
-        const response = await axios.get(`/api/v1/app/product/slug/${slug}`);
-        setProduct(response.data);
+      const fetchData = async () => {
+        const [productResponse, stockQuantityResponse] = await Promise.all([
+          axios.get(`/api/v1/app/product/slug/${slug}`),
+          axios.get(`/api/v1/app/product/stockquantity/${slug}`)
+        ]);
+  
+        setProduct(productResponse.data);
+        setStockQuantity(stockQuantityResponse.data.stockQuantity);
       };
-      fetchProducts();
+  
+      fetchData();
     } catch (error) {
       toast.error(error.response.data.msg);
     }
   }, [slug]);
+  
 
-  useEffect(() => {
-    try {
-      const fetchProducts = async () => {
-        const response = await axios.get(`/api/v1/app/product/stockquantity/${slug}`);
-        setStockQuantity(response.data.stockQuantity);
-      };
-      fetchProducts();
-    } catch (error) {
-      toast.error(error.response.data.msg);
-    }
-  }, [slug]);
-
-  //RE: refactor this useEffect 
 
   return (
     <>

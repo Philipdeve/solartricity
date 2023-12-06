@@ -20,9 +20,9 @@ const Navbar = () => {
         >
           <ion-icon name={open ? "close" : "menu"}></ion-icon>
         </div>
-        <div className="ml-5">
+        <Link to={"/"} className="ml-5">
           <Logo />
-        </div>
+        </Link>
         <ul
           className={`md:flex md:items-center md:py-0 py-12 absolute md:static bg-white md:z-auto z-[-1] left-0 w-5/6  md:w-auto md:pl-0 pl-9 transition-all duration-500 ease-in ${
             open ? "top-10 h-screen" : "top-[-490px]"
@@ -72,9 +72,12 @@ const Navbar = () => {
           </li>
         </ul>
         <div>
-          <ion-icon name="person-outline" size="large"></ion-icon>
+          <Link className="transition duration-300 hover:text-yellow-400 md:mr-3">
+            <ion-icon name="person-outline" size="large"></ion-icon>
+          </Link>
+          
 
-          <Link className="" to={"/cart"}>
+          <Link className="transition duration-300 hover:text-yellow-400" to={"/cart"}>
             <ion-icon name="cart-outline" size="large"></ion-icon>
           </Link>
           <div className="absolute top-3 right-6 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">

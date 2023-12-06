@@ -9,13 +9,15 @@ import { AiFillPlusSquare, AiFillMinusSquare } from "react-icons/ai";
 
 const Cart = () => {
   const {
-    cart: { cartItems }, addToCart, removeCartItem
+    cart: { cartItems },
+    addToCart,
+    removeCartItem,
   } = useAppContext();
 
   const updateCart = async (item, quantity) => {
     const { data } = await axios.get(`/api/v1/app/product/${item._id}`);
     if (data.stockQuantity < quantity) {
-      toast.error("Sorry. Product is out of stock");
+      toast.error("Product Stock Limit reached");
       return;
     }
     try {
@@ -25,11 +27,23 @@ const Cart = () => {
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
-  }
+  };
 
-  const handleRemoveCartItem = async(item) => {
-    removeCartItem(item)
-  }
+  const handleRemoveCartItem = async (item) => {
+    removeCartItem(item);
+  };
+
+  const totalNumeric = cartItems.reduce((accumulator, currentItem) => {
+    const numericPrice = parseFloat(currentItem.price.replace(/,/g, ""));
+    if (isNaN(numericPrice) || isNaN(currentItem.quantity)) {
+      toast.error(`Invalid price or quantity for ${currentItem.name}`);
+      return accumulator;
+    }
+    const itemValue = numericPrice * currentItem.quantity;
+    return accumulator + itemValue;
+  }, 0);
+
+  const totalFormatted = new Intl.NumberFormat().format(totalNumeric);
 
   return (
     <div className="bg-gray-200">
@@ -46,7 +60,8 @@ const Cart = () => {
             <div className="font-bold mb-2">CART SUMMARY</div>
             <div className="flex justify-between">
               <div>SubTotal</div>
-              <div className="font-bold">N 1777.00</div>
+              {/* <div className="font-bold"> {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}</div> */}
+              <div className="font-bold">&#8358; {totalFormatted}</div>
             </div>
           </aside>
           <aside className="md:w-3/4 bg-white md:mr-6 rounded-md p-3 md:hidden">
@@ -59,7 +74,7 @@ const Cart = () => {
                     <div>
                       <small>{item.name}</small>
                       <p className="font-bold text-xl">&#8358; {item.price}</p>
-                      {item.quantity > 0 ? (
+                      {item.stockQuantity > 0 ? (
                         <p className="italic text-sm">In Stock</p>
                       ) : (
                         <p className="italic text-sm ">Out of Stock</p>
@@ -67,36 +82,81 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center text-yellow-400" onClick={() => handleRemoveCartItem(item)}>
+                    <div
+                      className="flex items-center text-yellow-400 transition-all hover:bg-gray-200 p-2  cursor-pointer"
+                      onClick={() => handleRemoveCartItem(item)}
+                    >
                       <IoTrashBin />
                       <p className="ml-2">REMOVE</p>
                     </div>
                     <div className="flex  mx-3 text-yellow-400 px-3 py-1 rounded-lg">
-                      <AiFillPlusSquare size={25}     onClick={() =>
-                          updateCart(item, item.quantity + 1)
-                        } />
+                      <AiFillPlusSquare
+                        size={25}
+                        onClick={() => updateCart(item, item.quantity + 1)}
+                      />
                       <p className="mx-5 text-black">{item.quantity}</p>
-                      <AiFillMinusSquare size={25} onClick={() =>
-                          updateCart(item, item.quantity - 1)
-                        }  />
+                      <AiFillMinusSquare
+                        size={25}
+                        onClick={() => updateCart(item, item.quantity - 1)}
+                      />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </aside>
-          <aside className="md:w-3/4 bg-white md:mr-6 rounded-md p-3 hidden md:block">
-            <div>Cart(3)</div>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt
-            incidunt perspiciatis provident neque vitae nemo delectus velit
-            quidem praesentium quia eos corrupti perferendis tempore, veniam
-            fugit dolores! Sint, non dignissimos.
+          <aside className="md:w-3/4 bg-white md:mr-6 rounded-md p-3 hidden md:block  mb-2  md:mt-20">
+            <div className="text-xl font-semibold">
+              Cart ({cartItems.length})
+            </div>
+            <div className="grid grid-cols-1 gap-4 mt-2 ">
+              {cartItems.map((item) => (
+                <div key={item._id} className="card">
+                  <div className="flex">
+                    <img className="w-[15%] mr-1" src={item.image}></img>
+                    <div>
+                      <p className="text-base">{item.name}</p>
+                      <p className="font-bold text-xl">&#8358; {item.price}</p>
+                      {item.stockQuantity > 0 ? (
+                        <p className="italic text-sm">In Stock</p>
+                      ) : (
+                        <p className="italic text-sm ">Out of Stock</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div
+                      className="flex items-center text-yellow-400 transition-all hover:bg-gray-200 p-2  cursor-pointer"
+                      onClick={() => handleRemoveCartItem(item)}
+                    >
+                      <IoTrashBin />
+                      <p className="ml-2">REMOVE</p>
+                    </div>
+                    <div className="flex  mx-3 text-yellow-400 px-3 py-1 rounded-lg">
+                      <AiFillPlusSquare
+                        size={30}
+                        onClick={() => updateCart(item, item.quantity + 1)}
+                      />
+                      <p className="mx-5 text-black text-lg">{item.quantity}</p>
+                      <AiFillMinusSquare
+                        size={30}
+                        onClick={() => updateCart(item, item.quantity - 1)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </aside>
-          <section className="md:w-1/4 mt-3 bg-white rounded-sm hidden md:block">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti,
-            qui temporibus magnam2222 iusto omnis modi non ipsa dolor, enim
-            nobis dolorum asperiores sapiente architecto harum suscipit vero
-            pariatur officia at..
+          <section className="md:w-1/4 mt-3 bg-white rounded-sm hidden md:block md:mt-20 md:h-[130px]">
+            <h4 className="text-sm text-center my-2">CART SUMMARY</h4>
+            <div className="flex justify-between border-t-2 border-solid border-gray-300 p-2">
+              <div className="text-sm">SubTotal</div>
+              <div className="font-bold">&#8358; {totalFormatted}</div>
+            </div>
+            <Link className="bg-yellow-400 transition text-white duration-300   p-2 text-base rounded-sm  flex justify-center mx-2 border-none cursor-pointer hover:bg-yellow-600 font-medium ">
+              Checkout
+            </Link>
           </section>
         </main>
       )}
