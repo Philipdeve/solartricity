@@ -2,9 +2,12 @@ import React, { useReducer, useContext, useEffect } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import { TOGGLE_SIDEBAR, ADMIN_SIGNUP,
-  ADMIN_SIGNUP_SUCCESS,
-  ADMIN_SIGNUP_ERROR, ADMIN_SIGNIN, ADMIN_SIGNIN_SUCCESS, ADMIN_SIGNIN_ERROR,  CART_ADD_ITEM, CART_REMOVE_ITEM} from "./actions";
+import { TOGGLE_SIDEBAR,SIGNUP,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR,
+  SIGNIN,
+  SIGNIN_SUCCESS,
+  SIGNIN_ERROR,  CART_ADD_ITEM, CART_REMOVE_ITEM, SAVE_SHIPPING_ADDRESS} from "./actions";
 
 import reducer from "./reducer";
 
@@ -17,6 +20,9 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   cart: {
+    shippingAddress: localStorage.getItem("shippingAddress")
+    ? JSON.parse(localStorage.getItem("shippingAddress"))
+    : {},
     cartItems: localStorage.getItem("cartItems")
     ? JSON.parse(localStorage.getItem("cartItems"))
     : [],
@@ -45,12 +51,12 @@ const AppProvider = ({ children }) => {
   };
   
   const adminSignup = async (currentUser) => {
-    dispatch({ type: ADMIN_SIGNUP });
+    dispatch({ type: SIGNUP });
     try {
       const {data} = await axios.post("/api/v1/auth/admin-signup", currentUser);
       const { user, token } = data;
       dispatch({
-        type: ADMIN_SIGNUP_SUCCESS,
+        type: SIGNUP_SUCCESS,
         payload: { user, token },
       });
       toast.success("User Created, Redirecting..........",  {
@@ -60,20 +66,19 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.response.data.msg)
       dispatch({
-        type: ADMIN_SIGNUP_ERROR,
+        type: SIGNUP_ERROR,
         payload: { msg: error.response.data.msg },
       });
-    }
-   
+    } 
   }; 
 
   const adminSignin = async (currentUser) => {
-    dispatch({ type: ADMIN_SIGNIN });
+    dispatch({ type: SIGNIN });
     try {
       const {data} = await axios.post("/api/v1/auth/admin-signin", currentUser);
       const { user, token } = data;
       dispatch({
-        type: ADMIN_SIGNIN_SUCCESS,
+        type: SIGNIN_SUCCESS,
         payload: { user, token },
       });
       toast.success("User Logged In, Redirecting..........",  {
@@ -83,11 +88,55 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       toast.error(error.response.data.msg)
       dispatch({
-        type: ADMIN_SIGNIN_ERROR,
+        type: SIGNIN_ERROR,
         payload: { msg: error.response.data.msg }
       });
     }
-  };  
+  };
+  
+  const signup = async (currentUser) => {
+    dispatch({ type: SIGNUP });
+    try {
+      const {data} = await axios.post("/api/v1/auth/signup", currentUser);
+      const { user, token } = data;
+      dispatch({
+        type: SIGNUP_SUCCESS,
+        payload: { user, token },
+      });
+      toast.success("User Created, Redirecting..........",  {
+        autoClose: 2000,
+      });
+      addUserToLocalStorage({ user, token });
+    } catch (error) {
+      toast.error(error.response.data.msg)
+      dispatch({
+        type: SIGNUP_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    } 
+  }; 
+
+  const signin = async (currentUser) => {
+    dispatch({ type: SIGNIN });
+    try {
+      const {data} = await axios.post("/api/v1/auth/signin", currentUser);
+      const { user, token } = data;
+      dispatch({
+        type: SIGNIN_SUCCESS,
+        payload: { user, token },
+      });
+      toast.success("User Logged In, Redirecting..........",  {
+        autoClose: 2000,
+      });
+      addUserToLocalStorage({ user, token});
+    } catch (error) {
+      dispatch({
+        type: SIGNIN_ERROR,
+        payload: { msg: error.response.data.msg }
+      });
+      toast.error(error.response.data.msg)
+    }
+  };
 
   const addToCart = async(product, quantity) => {
     dispatch({
@@ -106,8 +155,18 @@ const AppProvider = ({ children }) => {
     });
   }
 
+  const saveShippingAddress = async (shippingData) => {
+    dispatch({
+      type: SAVE_SHIPPING_ADDRESS, 
+      payload: {...shippingData}
+    })
+    toast.success("Shipping Address saved",  {
+      autoClose: 1000,
+    });
+  }
+
   return (
-    <AppContext.Provider value={{ ...state, toggleSidebar, adminSignup, adminSignin, addToCart, removeCartItem}}>
+    <AppContext.Provider value={{ ...state, toggleSidebar, adminSignup, adminSignin, addToCart, removeCartItem, signup, signin, saveShippingAddress}}>
       {children}
     </AppContext.Provider>
   );

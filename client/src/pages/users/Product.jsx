@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { CiCirclePlus, CiCircleMinus, CiShoppingCart } from "react-icons/ci";
 import { AiFillPlusSquare, AiFillMinusSquare } from "react-icons/ai";
 import { FaChevronRight, FaArrowRight } from "react-icons/fa";
+import { Helmet } from 'react-helmet-async';
 
 
 const Product = () => {
@@ -70,6 +71,11 @@ const Product = () => {
 
   return (
     <>
+       <Helmet>
+        <title>
+          Solartricity | Product
+        </title>
+      </Helmet>
       <Navbar />
       <header className="m-5 lg:mt-10 pt-16 flex items-center">
         <Link to={"/"} className="mr-2">Home</Link>

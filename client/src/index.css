@@ -99,6 +99,9 @@ h5 {
   box-shadow: var(--shadow-3);
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
 /* form */
 
 .form {
@@ -149,4 +152,29 @@ h5 {
 
 .custom-container{
   @apply w-[85vw] lg:w-[90vw] mx-auto my-0 max-w-6xl py-7;
+}
+
+.floating {
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  margin-top: 5px;
+  margin: 0 auto;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(0, 0px);
+  }
+  50% {
+    transform: translate(0, 15px);
+  }
+  100% {
+    transform: translate(0, -0px);
+  }
+}
+
+.custom-shadow1{
+  box-shadow: var(--shadow-1);
 }

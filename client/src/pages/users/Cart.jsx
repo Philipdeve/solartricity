@@ -5,9 +5,12 @@ import { useAppContext } from "../../context/appContext";
 import Navbar from "../../components/Navbar";
 import { toast } from "react-toastify";
 import { IoTrashBin } from "react-icons/io5";
-import { AiFillPlusSquare, AiFillMinusSquare } from "react-icons/ai";
+import { AiFillPlusSquare, AiFillMinusSquare, AiOutlineShoppingCart } from "react-icons/ai";
+import { Helmet} from 'react-helmet-async';
 
 const Cart = () => {
+  const navigate = useNavigate();
+
   const {
     cart: { cartItems },
     addToCart,
@@ -23,7 +26,6 @@ const Cart = () => {
     try {
       await addToCart(item, quantity);
       toast.success(`Cart update successful`);
-      //navigate('/cart');
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
@@ -33,8 +35,12 @@ const Cart = () => {
     removeCartItem(item);
   };
 
+  const checkout = async () => {
+    navigate("/signup?redirect=/checkout/shipping")
+  }
+
   const totalNumeric = cartItems.reduce((accumulator, currentItem) => {
-    const numericPrice = parseFloat(currentItem.price.replace(/,/g, ""));
+    const numericPrice = parseFloat(currentItem.price.toString().replace(/,/g, ""));
     if (isNaN(numericPrice) || isNaN(currentItem.quantity)) {
       toast.error(`Invalid price or quantity for ${currentItem.name}`);
       return accumulator;
@@ -45,14 +51,31 @@ const Cart = () => {
 
   const totalFormatted = new Intl.NumberFormat().format(totalNumeric);
 
+
+
   return (
     <div className="bg-gray-200">
+      <Helmet>
+        <title>
+          Solartricity | Cart
+        </title>
+      </Helmet>
+
       <Navbar />
       {cartItems.length === 0 ? (
-        <div className="mt-20 pt-8 p-4 rounded shadow-md">
-          <p className="text-lg font-semibold">
-            Cart is empty. <Link to="/">Go Shopping</Link>
-          </p>
+        <div className="mt-20 lg:mt-16 pt-8 p-4  ">
+          <div className="lg:bg-white custom-container text-center ">
+            <div className="flex justify-center mb-4 p-3 floating text-yellow-400">
+              <AiOutlineShoppingCart  size={50}/>
+            </div>
+            <p className="text-lg lg:text-xl font-semibold">
+              Your Cart is empty!
+            </p>
+            <p className="mb-4 lg:mb-8">Browse our categories and discover our best deals!</p>
+            <Link to={"/"} className="bg-yellow-400 transition text-white duration-300   p-2 px-6 text-base rounded-lg   mx-2 border-none cursor-pointer hover:bg-yellow-600 font-medium ">
+              Shop Now
+            </Link>
+          </div>
         </div>
       ) : (
         <main className="custom-container flex flex-col md:flex-row ">
@@ -95,15 +118,20 @@ const Cart = () => {
                         onClick={() => updateCart(item, item.quantity + 1)}
                       />
                       <p className="mx-5 text-black">{item.quantity}</p>
-                      <AiFillMinusSquare
-                        size={25}
-                        onClick={() => updateCart(item, item.quantity - 1)}
-                      />
+                      <button disabled={item.quantity === 1}>
+                        <AiFillMinusSquare
+                          size={25}
+                          onClick={() => updateCart(item, item.quantity - 1)}
+                        />
+                      </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+            <button onClick={checkout} className="bg-yellow-400 transition text-white duration-300 w-3/4 mx-auto   p-2 text-base rounded-sm  flex justify-center  mt-2 border-none cursor-pointer hover:bg-yellow-600 font-medium ">
+              Checkout
+            </button>
           </aside>
           <aside className="md:w-3/4 bg-white md:mr-6 rounded-md p-3 hidden md:block  mb-2  md:mt-20">
             <div className="text-xl font-semibold">
@@ -138,10 +166,12 @@ const Cart = () => {
                         onClick={() => updateCart(item, item.quantity + 1)}
                       />
                       <p className="mx-5 text-black text-lg">{item.quantity}</p>
-                      <AiFillMinusSquare
-                        size={30}
-                        onClick={() => updateCart(item, item.quantity - 1)}
-                      />
+                      <button disabled={item.quantity === 1}>
+                        <AiFillMinusSquare
+                          size={30}
+                          onClick={() => updateCart(item, item.quantity - 1)}
+                        />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -154,9 +184,9 @@ const Cart = () => {
               <div className="text-sm">SubTotal</div>
               <div className="font-bold">&#8358; {totalFormatted}</div>
             </div>
-            <Link className="bg-yellow-400 transition text-white duration-300   p-2 text-base rounded-sm  flex justify-center mx-2 border-none cursor-pointer hover:bg-yellow-600 font-medium ">
+            <button onClick={checkout} className="bg-yellow-400 transition text-white duration-300   p-2 text-base rounded-sm  flex justify-center  w-3/4 mx-auto  border-none cursor-pointer hover:bg-yellow-600 font-medium ">
               Checkout
-            </Link>
+            </button>
           </section>
         </main>
       )}

@@ -109,7 +109,7 @@ const Home = () => {
           </p>
         </div>
       </section>
-      <section className="bg-gray-100">
+      <section className="">
         <div className="w-[85vw] lg:w-[90vw] mx-auto my-0 max-w-6xl py-7">
           <Slider {...settings}>
             {solarpanels.map((product) => (
@@ -123,7 +123,7 @@ const Home = () => {
                     alt={product.name}
                     className="w-full  mb-10 md:h-[200px] lg:h-[250px]"
                   />
-                  <h1 className="font-bold text-sm text-yellow-400">
+                  <h1 className="font-bold text-sm ">
                     {product.name.substring(0, 18) + "....."}
                   </h1>
                 </Link>
@@ -168,7 +168,7 @@ const Home = () => {
                     alt={product.name}
                     className="w-full  mb-10 md:h-[200px] lg:h-[250px]"
                   />
-                  <h1 className="font-bold text-sm text-yellow-400">
+                  <h1 className="font-bold text-sm ">
                     {product.name.substring(0, 18) + "....."}
                   </h1>
                 </Link>
@@ -210,7 +210,7 @@ const Home = () => {
                     alt={product.name}
                     className="w-full  mb-10 md:h-[200px] lg:h-[250px]"
                   />
-                  <h1 className="font-bold text-sm text-yellow-400">
+                  <h1 className="font-bold text-sm ">
                     {product.name.substring(0, 18) + "....."}
                   </h1>
                 </Link>

@@ -1,14 +1,13 @@
 import {
   TOGGLE_SIDEBAR,
-  ADMIN_SIGNUP,
-  ADMIN_SIGNUP_SUCCESS,
-  ADMIN_SIGNUP_ERROR,
-  ADMIN_SIGNIN,
-  ADMIN_SIGNIN_SUCCESS,
-  ADMIN_SIGNIN_ERROR,
-  CLEAR_VALUES,
+  SIGNUP,
+  SIGNUP_SUCCESS,
+  SIGNUP_ERROR,
+  SIGNIN,
+  SIGNIN_SUCCESS,
+  SIGNIN_ERROR,
   CART_ADD_ITEM,
-  CART_REMOVE_ITEM,
+  CART_REMOVE_ITEM, SAVE_SHIPPING_ADDRESS
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -18,13 +17,13 @@ const reducer = (state, action) => {
     return { ...state, showSideBar: !state.showSideBar };
   }
 
-  if (action.type === ADMIN_SIGNUP) {
+  if (action.type === SIGNUP) {
     return {
       ...state,
       isLoading: true,
     };
   }
-  if (action.type === ADMIN_SIGNUP_SUCCESS) {
+  if (action.type === SIGNUP_SUCCESS) {
     return {
       ...state,
       isLoading: true,
@@ -32,20 +31,20 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
-  if (action.type === ADMIN_SIGNUP_ERROR) {
+  if (action.type === SIGNUP_ERROR) {
     return {
       ...state,
       isLoading: false,
     };
   }
 
-  if (action.type === ADMIN_SIGNIN) {
+  if (action.type === SIGNIN) {
     return {
       ...state,
       isLoading: true,
     };
   }
-  if (action.type === ADMIN_SIGNIN_SUCCESS) {
+  if (action.type === SIGNIN_SUCCESS) {
     return {
       ...state,
       isLoading: true,
@@ -53,7 +52,7 @@ const reducer = (state, action) => {
       user: action.payload.user,
     };
   }
-  if (action.type === ADMIN_SIGNIN_ERROR) {
+  if (action.type === SIGNIN_ERROR) {
     return {
       ...state,
       isLoading: false,
@@ -87,6 +86,13 @@ const reducer = (state, action) => {
     console.log(cartItems);
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
     return { ...state, cart: { ...state.cart, cartItems } };
+  }
+
+  if (action.type === SAVE_SHIPPING_ADDRESS){
+    const shippingData = action.payload;
+    localStorage.setItem("shippingAddress", JSON.stringify(shippingData));
+    return { ...state, cart: { ...state.cart, shippingData } };
+
   }
 
   throw new Error(`no such action: ${action.type}`);
